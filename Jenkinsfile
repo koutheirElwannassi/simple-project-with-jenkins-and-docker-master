@@ -4,8 +4,8 @@ pipeline {
     stages {
         stage('Testing Environment') {
             steps {
-                dir("server/") {
-                    sh 'mvn install -DSkipTests'
+                dir("server/") { withMaven(maven: 'mvn'){
+                    sh 'mvn install -DSkipTests'}
                 }
             }
         }
