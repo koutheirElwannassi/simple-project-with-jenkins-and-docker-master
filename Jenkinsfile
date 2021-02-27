@@ -6,7 +6,7 @@ pipeline {
             steps {
                 dir("server/") {
 					echo "Build stage and skipping tests"
-                    sh 'mvn install -DSkiptests'
+                    sh 'mvn install -DskipTests'
                     
                 }
             }
