@@ -4,23 +4,22 @@ pipeline {
     stages {
         stage('Testing Environment') {
             steps {
-                dir("server/") {
-                    sh 'mvn test -Dtest=ControllerAndServiceSuite'
-                    sh 'mvn test -Dtest=IntegrationSuite'
+                dir("server/") { withMaven(maven: 'mvn'){
+                    sh 'mvn install -DSkipTests'}
                 }
             }
         }
         stage('Build') {
             steps {
                 dir("server/"){
-                    sh 'mvn install -DskipTests'
+                    echo "Build"
                 }
             }
         }
         stage('Staging') {
             steps {
-                sh 'sudo docker-compose build'
-                sh 'sudo docker-compose up -d'
+                sh 'docker-compose build'
+                sh 'docker-compose up -d'
             }
         }
         stage('end2end Tests') {

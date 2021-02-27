@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,22 +49,36 @@ public class NoteServiceTest {
 
 	@Test
 	public void updateNoteTest() throws NotFoundException {
-		NoteDto dto = new NoteDto(1L, "new Text");
-		Note note = new Note(1L, "old Text");
-		
-		Mockito.when(noteRepository.getOne(dto.getId())).thenReturn(note);
-		assertEquals("new Text", noteService.updateNote(dto).getText());
-		assertEquals((Long) 1L, noteService.updateNote(dto).getId());
+		 NoteDto dto = new NoteDto(1L, "new Text");
+
+             Note note = new Note(1L, "old Text");
+
+             Optional<Note> note1 = Optional.of(note);
+
+             Mockito.when(noteRepository.findById(dto.getId())).thenReturn(note1);
+
+          
+
+             assertEquals("new Text", noteService.updateNote(dto).getText());
+
+             assertEquals((Long) 1L, noteService.updateNote(dto).getId());
 	}
 	
 	@Test
 	public void deleteNoteTest() throws NotFoundException {
 		Long id = 1L;
-		Note note = new Note(id, "Text");
-		Mockito.when(noteRepository.getOne(id)).thenReturn(note);		
-		
-		assertEquals("Text", noteService.deleteNote(id).getText());
-		verify(noteRepository, Mockito.times(1)).deleteById(id);
+
+             Note note = new Note(id, "Text");
+
+             Optional<Note> note1 = Optional.of(note);
+
+             Mockito.when(noteRepository.findById(id)).thenReturn(note1);      
+
+            
+
+             assertEquals("Text", noteService.deleteNote(id).getText());
+
+             verify(noteRepository, Mockito.times(1)).deleteById(id);
 	}
 	
 }
