@@ -2,27 +2,30 @@ pipeline {
     agent any
 
     stages {
-        stage('Testing Environment') {
-            steps {
-                dir("server/") { withMaven(maven: 'mvn'){
-                    sh 'mvn install -DSkipTests'}
-                }
-            }
-        }
         stage('Build') {
             steps {
-                dir("server/"){
-                    echo "Build"
+                dir("server/") {
+					echo "Build stage and skipping tests"
+                    sh 'mvn install -DSkiptests'
+                    
                 }
             }
         }
-        stage('Staging') {
+        stage('Junit Tests') {
+            steps {
+                dir("server/"){
+					sh 'mvn test -Dtest=ControllerAndServiceSuite'
+					echo "Build Done !!!"
+                }
+            }
+        }
+        stage('Deploy') {
             steps {
                 sh 'docker-compose build'
                 sh 'docker-compose up -d'
             }
         }
-        stage('end2end Tests') {
+        stage('Selenium Tests') {
             steps {
                 dir("server/") {
                     sh 'mvn test -Dtest=SeleniumSuite'
