@@ -1,12 +1,15 @@
 pipeline {
     agent any
-
+	tools { 
+        maven "localMVN" 
+        jdk "localJDK" 
+    }
     stages {
         stage('Build') {
             steps {
                 dir("server/") {
 					echo "Build stage and skipping tests"
-                    sh 'mvn install -DSkiptests'
+                    sh 'mvn install -DskipTests'
                     
                 }
             }
