@@ -9,7 +9,7 @@ pipeline {
             steps {
                 dir("server/") {
 					echo "Build stage and skipping test"
-                    sh 'mvn install -DskipTests'
+                    bat 'mvn install -DskipTests'
                     
                 }
             }
@@ -17,21 +17,21 @@ pipeline {
         stage('Junit Tests') {
             steps {
                 dir("server/"){
-					sh 'mvn test -Dtest=ControllerAndServiceSuite'
+					bat 'mvn test -Dtest=ControllerAndServiceSuite'
 					echo "Build Done !!!"
                 }
             }
         }
         stage('Deploy') {
             steps {
-                sh 'docker-compose build'
-                sh 'docker-compose up -d'
+                bat 'docker-compose build'
+                bat 'docker-compose up -d'
             }
         }
         stage('Selenium Tests') {
             steps {
                 dir("server/") {
-                    sh 'mvn test -Dtest=SeleniumSuite'
+                    bat 'mvn test -Dtest=SeleniumSuite'
                 }
             }
         }
