@@ -34,7 +34,7 @@ public class HomePageCreateTest {
 	
 	@Test
 	public void addNoteTest() {
-		new WebDriverWait(driver, 4).until(ExpectedConditions.invisibilityOfElementLocated(By.id("loading-notes")));
+		new WebDriverWait(driver, 4).until(ExpectedConditions.invisibilityOfElementLocated(By.id("notes")));
 		int before = homepage.noteLength();
 		homepage.addNote(SeleniumConst.OLD_TEXT);
 		assertEquals(before + 1, homepage.noteLength());
