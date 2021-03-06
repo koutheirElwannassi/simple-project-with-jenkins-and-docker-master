@@ -1,37 +1,39 @@
 pipeline {
     agent any
-	tools { 
-        maven "localMVN" 
-        jdk "localJDK" 
-    }
+
     stages {
-        stage('Build') {
-            steps {
+        stage('Testing Environment') {
+            steps ('Junit-Tests'){
                 dir("server/") {
-					echo "Build stage and skipping test"
-                    bat 'mvn install -DskipTests'
+                    bat 'mvn test -Dtest=ControllerAndServiceSuite'
                     
                 }
             }
-        }
-        stage('Junit Tests') {
-            steps {
-                dir("server/"){
-					bat 'mvn test -Dtest=ControllerAndServiceSuite'
-					echo "Build Done !!!"
+			steps ('Integration-Tests'){
+                dir("server/") {
+                    bat 'mvn test -Dtest=IntegrationSuite'
                 }
             }
         }
-        stage('Deploy') {
+        stage('Build') {
             steps {
-                bat 'docker-compose build'
-                bat 'docker-compose up -d'
+                dir("server/"){
+                    bat 'mvn install -DskipTests'
+                }
             }
         }
-        stage('Selenium Tests') {
-            steps {
+        stage('Staging') {
+            steps('Building-The-Image') {
+                bat 'sudo docker-compose build'
+            }
+			steps('Running-The-Image') {
+                bat 'sudo docker-compose up -d'
+            }
+        }
+        stage('end2end Tests') {
+            steps('Selenium-Tests') {
                 dir("server/") {
-                    bat 'mvn test -Dtest=SeleniumSuite'
+                    sh 'mvn test -Dtest=SeleniumSuite'
                 }
             }
         }
