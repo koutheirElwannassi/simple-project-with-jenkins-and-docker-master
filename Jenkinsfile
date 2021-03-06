@@ -3,18 +3,24 @@ pipeline {
 
     stages {
         stage('Testing Environment') {
-            steps ('Junit-Tests'){
-                dir("server/") {
-                    bat 'mvn test -Dtest=ControllerAndServiceSuite'
+		parallel {
+			stage('Testing ') {
+				steps ('Junit-Tests'){
+					dir("server/") {
+						bat 'mvn test -Dtest=ControllerAndServiceSuite'
                     
-                }
-            }
-			steps ('Integration-Tests'){
-                dir("server/") {
-                    bat 'mvn test -Dtest=IntegrationSuite'
-                }
-            }
+						}
+					}
+			}
+			stage('Testing 2') {
+				steps ('Integration-Tests'){
+					dir("server/") {
+						bat 'mvn test -Dtest=IntegrationSuite'
+					}
+				}
+			}
         }
+			}	
         stage('Build') {
             steps {
                 dir("server/"){
@@ -25,10 +31,9 @@ pipeline {
         stage('Staging') {
             steps('Building-The-Image') {
                 bat 'sudo docker-compose build'
+				bat 'sudo docker-compose up -d'
             }
-			steps('Running-The-Image') {
-                bat 'sudo docker-compose up -d'
-            }
+			
         }
         stage('end2end Tests') {
             steps('Selenium-Tests') {
