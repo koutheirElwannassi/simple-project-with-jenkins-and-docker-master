@@ -20,7 +20,7 @@ public class HomePageUpdateTest {
 	public void setup() {
 		System.setProperty(SeleniumConst.DRIVER_KEY, SeleniumConst.DRIVER_LOCATION);
 		ChromeOptions chromeOptions = new ChromeOptions();
-		chromeOptions.addArguments("--headless");
+		//chromeOptions.addArguments("--headless");
 		driver = new ChromeDriver(chromeOptions);
 		driver.get(SeleniumConst.HOMEPAGE_URL);
 		homepage = new HomePagePOM(driver);
