@@ -21,7 +21,7 @@ pipeline {
                 }
             }
         }
-		stage('Build') {
+		stage('Build/Majed') {
             steps {
                 dir("server/") {
                     bat 'mvn install -DskipTests'
